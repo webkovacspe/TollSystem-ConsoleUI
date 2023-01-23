@@ -1,6 +1,5 @@
 package hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.controller;
 
-import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.validator.MotorwayVignetteResponseValidator;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.view.TollSystemConsoleUIView;
 import hu.kovacspeterzoltan.bootcamp.tollsystemapp.api.MotorwayVignetteAPI;
 
@@ -12,7 +11,7 @@ public class TollSystemConsoleUIController {
         view = new TollSystemConsoleUIView();
     }
 
-    public void setMotorwayVignetteAPI(MotorwayVignetteAPI motorwayVignetteImp) {
+    public void setMotorwayVignetteImp(MotorwayVignetteAPI motorwayVignetteImp) {
         this.motorwayVignetteInteractor = motorwayVignetteImp;
     }
     public void start() {
