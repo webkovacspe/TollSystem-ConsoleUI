@@ -1,17 +1,55 @@
 package hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.view;
 
+import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.controller.TollSystemConsoleUIController;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.dto.MotorwayVignetteResponseDTO;
+import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.parser.ConsoleParser;
+import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.validator.InputValidator;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.viewmodel.MotorwayVignetteModel;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.viewmodel.VehicleModel;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class TollSystemConsoleUIView {
-    public void displaySelectActionMessage() {
-        System.out.println("Válasszon funkciót: Lekérdezés (l); Kilépés (k)");
+    private TollSystemConsoleUIController controller;
+    private final InputValidator validator;
+    private final ConsoleParser parser;
+    private Scanner scanner;
+
+    public TollSystemConsoleUIView() {
+        validator = new InputValidator();
+        parser = new ConsoleParser();
     }
 
-    public void displayRegistrationNumberInputMessage() {
+    public void setController(TollSystemConsoleUIController controller) {
+        this.controller = controller;
+    }
+
+    public void start() {
+        scanner = new Scanner(System.in);
+        String action;
+        do {
+            action = getActionString();
+
+            if ("l".equals(action)) {
+                displayRegistrationNumberInputMessage();
+                String registrationNumber = scanner.next();
+                try {
+                    validator.registrationNumberValidator(registrationNumber);
+                    controller.findAction(parser.registrationNumberInputString(registrationNumber));
+                } catch (RuntimeException e) {
+                    System.out.println("Hibásad adta meg a rendszámot");
+                }
+            }
+        } while (!"k".equals(action));
+    }
+
+    private String getActionString() {
+        System.out.println("Válasszon funkciót: Lekérdezés (l); Kilépés (k)");
+        return scanner.next();
+    }
+
+    private void displayRegistrationNumberInputMessage() {
         System.out.println("Adja meg a rendszámot:");
     }
 
