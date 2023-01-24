@@ -1,19 +1,20 @@
-package hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.dto;
+package hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.presenter;
 
+import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.dto.MotorwayVignetteResponseDTO;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.parser.MotorwayVignetteParser;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.validator.MotorwayVignetteResponseValidator;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.view.TollSystemConsoleUIView;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.viewmodel.MotorwayVignetteModel;
 import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.viewmodel.VehicleModel;
 import hu.kovacspeterzoltan.bootcamp.tollsystemapp.api.MotorwayVignettePresenterInterface;
-import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TollSystemAppPresenterImp implements MotorwayVignettePresenterInterface {
-    private TollSystemConsoleUIView view;
-    private MotorwayVignetteResponseValidator validator;
-    private MotorwayVignetteParser parser;
+    private final TollSystemConsoleUIView view;
+    private final MotorwayVignetteResponseValidator validator;
+    private final MotorwayVignetteParser parser;
 
     public TollSystemAppPresenterImp() {
         view = new TollSystemConsoleUIView();
@@ -22,15 +23,16 @@ public class TollSystemAppPresenterImp implements MotorwayVignettePresenterInter
     }
 
     @Override
-    public void displayJsonResponse(String jsonString) {
-        validator.responseValidator(jsonString);
-        JSONObject responseJsonObject = parser.jsonStringToJsonObject(jsonString);
-        if (responseJsonObject.has("errorMessage")) {
-            view.displayErrorMessage(responseJsonObject);
+    public void displayJsonResponse(String responseJsonString) {
+        validator.responseValidator(responseJsonString);
+        MotorwayVignetteResponseDTO responseDTO = parser.jsonStringToMotorwayVignetteResponseDTO(responseJsonString);
+        if (responseDTO.isError()) {
+            view.displayErrorMessage(responseDTO);
         } else {
-            List<MotorwayVignetteModel> motorwayVignetteModels = parser.responseJsonObjectToMotorwayVignettes(responseJsonObject);
-            VehicleModel vehicle = parser.responseJsonObjectToVehicleModel(responseJsonObject);
-            view.displayMotorwayVignettesAndVehicle(motorwayVignetteModels, vehicle);
+            view.displayMotorwayVignettesAndVehicle(
+                    parser.responseDTOToMotorwayVignettes(responseDTO.motorwayVignettes),
+                    parser.responseDTOToVehicleModel(responseDTO.vehicle)
+            );
         }
     }
 }

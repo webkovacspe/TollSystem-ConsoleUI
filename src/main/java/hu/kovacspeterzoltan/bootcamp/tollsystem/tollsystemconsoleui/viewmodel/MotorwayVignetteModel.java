@@ -1,5 +1,7 @@
 package hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.viewmodel;
 
+import hu.kovacspeterzoltan.bootcamp.tollsystem.tollsystemconsoleui.parser.MotorwayVignetteParser;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,46 +14,22 @@ public class MotorwayVignetteModel {
     public Date validFrom;
     public Date validTo;
     public Date dateOfPurchase;
-    private SimpleDateFormat formatter;
+    public boolean isValid;
+    private final MotorwayVignetteParser parser;
 
     public MotorwayVignetteModel() {
-        formatter = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
+        parser = new MotorwayVignetteParser();
     }
 
     public String getFormattedValidFrom() {
-        return formatter.format(validFrom);
-    }
-
-    public void setValidFrom(String dateString) {
-        validFrom = dateParser(dateString);
+        return parser.dateToDateString(validFrom);
     }
 
     public String getFormattedValidTo() {
-        return formatter.format(validTo);
-    }
-
-    public void setValidTo(String dateString) {
-        validTo = dateParser(dateString);
+        return parser.dateToDateString(validTo);
     }
 
     public String getFormattedDateOfPurchase() {
-        return formatter.format(dateOfPurchase);
-    }
-
-    public void setDateOfPurchase(String dateString) {
-        dateOfPurchase = dateParser(dateString);
-    }
-
-    public boolean validDate() {
-        Date currentDate = new Date();
-        return (currentDate.compareTo(validFrom) <= 0 && currentDate.compareTo(validTo) >= 0);
-    }
-
-    private Date dateParser(String dateString) {
-        try {
-            return formatter.parse(dateString);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        return parser.dateToDateString(dateOfPurchase);
     }
 }
