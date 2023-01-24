@@ -23,13 +23,14 @@ public class MotorwayVignetteParser {
     public VehicleModel responseJsonObjectToVehicleModel(JSONObject responseJsonObject) {
         VehicleModel v = new VehicleModel();
         try {
-            v.registrationNumber = responseJsonObject.getString("registrationNumber");
-            v.vehicleType = responseJsonObject.getString("vehicleType");
-            v.make = responseJsonObject.getString("make");
-            v.model = responseJsonObject.getString("model");
-            v.numberOfSeats = responseJsonObject.getInt("numberOfSeats");
+            JSONObject vehicleJsonObject = responseJsonObject.getJSONObject("vehicle");
+            v.registrationNumber = vehicleJsonObject.getString("registrationNumber");
+            v.vehicleType = vehicleJsonObject.getString("vehicleType");
+            v.make = vehicleJsonObject.getString("make");
+            v.model = vehicleJsonObject.getString("model");
+            v.numberOfSeats = vehicleJsonObject.getInt("numberOfSeats");
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return v;
     }
@@ -42,7 +43,7 @@ public class MotorwayVignetteParser {
                 motorwayVignetteModels.add(jsonObjectToMotorwayVignetteeModel(motorwayVignettes.getJSONObject(i)));
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return motorwayVignetteModels;
     }

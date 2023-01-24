@@ -15,6 +15,18 @@ public class TollSystemConsoleUIView {
         System.out.println("Adja meg a rendszámot:");
     }
 
+    public void displayErrorMessage(JSONObject responseJsonObject) {
+        try {
+            System.out.println(responseJsonObject.get("errorMessage").toString());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void displayMotorwayVignettesAndVehicle(List<MotorwayVignetteModel> motorwayVignetteModels, VehicleModel vehicle) {
+        System.out.println("Az [%s] rendszámú jármű úthasználati jogosultság története:".formatted(vehicle.registrationNumber));
+        displayMotorwayVignettes(motorwayVignetteModels);
+        displayVehicle(vehicle);
+    }
     public void displayVehicle(VehicleModel vehicle) {
         String message = """
                 A jármű adatai:
@@ -33,30 +45,21 @@ public class TollSystemConsoleUIView {
         ));
     }
 
-    public void displayErrorMessage(JSONObject responseJsonObject) {
-        try {
-            System.out.println(responseJsonObject.get("errorMessage").toString());
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+    public void displayMotorwayVignettes(List<MotorwayVignetteModel> motorwayVignetteModels) {
+        if (motorwayVignetteModels.isEmpty()) {
+            System.out.println("-- Nincs megjelenítendő adat --");
+        } else {
+            motorwayVignetteModels.forEach(mv -> {
+                String message = "[%s][%s][%s][%s][%s]";
+                System.out.println(message.formatted(
+                        (mv.validDate() ? "X" : " "),
+                        mv.getFormattedValidFrom(),
+                        mv.getFormattedValidTo(),
+                        mv.vehicleCategory,
+                        mv.getFormattedDateOfPurchase()
+                ));
+            });
         }
     }
 
-    public void displayMotorwayVignettes(List<MotorwayVignetteModel> motorwayVignetteModels) {
-        motorwayVignetteModels.forEach(mv -> {
-            String message = "[%s][%s][%s][%s][%s]";
-            System.out.println(message.formatted(
-                    (mv.validDate() ? "X" : " "),
-                    mv.getFormattedValidFrom(),
-                    mv.getFormattedValidFrom(),
-                    mv.vehicleCategory,
-                    mv.getFormattedValidFrom()
-            ));
-        });
-    }
-
-    public void displayMotorwayVignettesAndVehicle(List<MotorwayVignetteModel> motorwayVignetteModels, VehicleModel vehicle) {
-        System.out.println("Az [%s] rendszámú jármű úthasználati jogosultság története:".formatted(vehicle.registrationNumber));
-        displayMotorwayVignettes(motorwayVignetteModels);
-        displayVehicle(vehicle);
-    }
 }

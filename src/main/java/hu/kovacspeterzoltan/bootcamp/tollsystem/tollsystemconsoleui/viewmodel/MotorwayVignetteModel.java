@@ -25,15 +25,15 @@ public class MotorwayVignetteModel {
         validFrom = dateParser(dateString);
     }
 
-    public Date getValidTo() {
-        return validTo;
+    public String getFormattedValidTo() {
+        return formatter.format(validTo);
     }
 
     public void setValidTo(String dateString) {
         validTo = dateParser(dateString);
     }
-    public Date getDateOfPurchase() {
-        return dateOfPurchase;
+    public String getFormattedDateOfPurchase() {
+        return formatter.format(dateOfPurchase);
     }
 
     public void setDateOfPurchase(String dateString) {
@@ -42,7 +42,7 @@ public class MotorwayVignetteModel {
 
     public boolean validDate() {
         Date currentDate = new Date();
-        return (currentDate.compareTo(validFrom) >= 0 && currentDate.compareTo(validTo) <= 0);
+        return (validFrom.compareTo(currentDate) >= 0 && validTo.compareTo(currentDate) <= 0);
     }
 
     private Date dateParser(String dateString) {
