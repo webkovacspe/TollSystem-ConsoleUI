@@ -39,14 +39,17 @@ public class MotorwayVignetteParser {
         List<MotorwayVignetteModel> motorwayVignetteModels = new ArrayList<>();
         try {
             JSONArray motorwayVignettes = responseJsonObject.getJSONArray("motorwayVignettes");
-            for (int i = 0; i < motorwayVignettes.length(); i++) {
-                motorwayVignetteModels.add(jsonObjectToMotorwayVignetteeModel(motorwayVignettes.getJSONObject(i)));
+            if (motorwayVignettes != null && motorwayVignettes.length() > 0) {
+                for (int i = 0; i < motorwayVignettes.length(); i++) {
+                    motorwayVignetteModels.add(jsonObjectToMotorwayVignetteeModel(motorwayVignettes.getJSONObject(i)));
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return motorwayVignetteModels;
     }
+
     private MotorwayVignetteModel jsonObjectToMotorwayVignetteeModel(JSONObject jsonObject) {
         MotorwayVignetteModel mv = new MotorwayVignetteModel();
         try {
