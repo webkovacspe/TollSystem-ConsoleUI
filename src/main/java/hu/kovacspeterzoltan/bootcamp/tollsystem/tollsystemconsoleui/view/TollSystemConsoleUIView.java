@@ -38,7 +38,7 @@ public class TollSystemConsoleUIView {
                     validator.registrationNumberValidator(registrationNumber);
                     controller.findAction(parser.registrationNumberInputString(registrationNumber));
                 } catch (RuntimeException e) {
-                    System.out.println("Hibásad adta meg a rendszámot");
+                    System.out.println("Hibásan adta meg a rendszámot");
                 }
             }
         } while (!"k".equals(action));

@@ -8,7 +8,7 @@ public class InputValidator {
             throw new InvalidRegitrationNumberException();
         }
 
-        Pattern pattern = Pattern.compile("^[a-zA-Z]{2}:[a-zA-Z]{2}-\\d{3}$");
+        Pattern pattern = Pattern.compile("^[a-zA-Z]{2}:[a-zA-Z]{2}-[0-9]{3}$");
         if (!pattern.matcher(registrationNumber).matches()) {
             throw new InvalidRegitrationNumberException();
         }
